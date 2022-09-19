@@ -6,4 +6,4 @@ async fn main() {
 
 pub static ATTACK_URL: &str = "https://SecretWindingAttributes.carghai74.repl.co";
 
-pub static FORCE: u64 = 200;
+pub static FORCE: u128 = 1500;
