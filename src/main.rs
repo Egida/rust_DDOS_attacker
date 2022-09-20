@@ -4,10 +4,10 @@ async fn main() {
     attack::start().await;
 }
 
-pub static ATTACK_URL: &str = "https://SecretWindingAttributes.carghai74.repl.co/hard";
+pub static ATTACK_URL: &str = "https://SecretWindingAttributes.carghai74.repl.co";
 
-pub static FORCE: u128 = 9500;
-// 6000 to can take down a replit flask api
+pub static FORCE: u128 = 450;
+// 450 to can take down a replit flask api
 // This is the code
 // app.route('/hard')
 // def hard_dos():
