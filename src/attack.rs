@@ -45,7 +45,7 @@ unsafe fn core_attack() {
                 }
                 Err(data) => {
                     ON_THREADS = ON_THREADS - 1;
-                    println!("OH NO BAD Status Code Recived is {}", data.to_string());
+                    println!("OH NO BAD Status Code Recived is {} Please lower threads!", data.to_string());
                 }
             }
         });
