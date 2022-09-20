@@ -18,7 +18,7 @@ pub async fn start() {
 }
 
 unsafe fn core_attack() {
-    if ON_THREADS < crate::FORCE {
+    if ON_THREADS + 1 < crate::FORCE {
         ON_THREADS = ON_THREADS + 1;
         tokio::spawn(async {
             loop {
@@ -51,12 +51,11 @@ unsafe fn core_attack() {
     }
 }
 
-fn time_funtion() {
+unsafe fn time_funtion() {
+    ON_THREADS = ON_THREADS + 1;
     loop {
         thread::sleep(time::Duration::from_millis(10));
-        unsafe {
-            AMOUNT = 0;
-        }
+        AMOUNT = 0;
     }
 }
 
