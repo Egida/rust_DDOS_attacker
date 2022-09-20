@@ -37,7 +37,7 @@ unsafe fn core_attack() {
                     AMOUNT = AMOUNT + 1;
                     ON_THREADS = ON_THREADS - 1;
                     println!(
-                        "Ran: {}, On threads: {}, Status code {}",
+                        "Passed: {}, On threads: {}, Status code {}",
                         AMOUNT,
                         ON_THREADS,
                         status_code.status()
@@ -45,7 +45,10 @@ unsafe fn core_attack() {
                 }
                 Err(data) => {
                     ON_THREADS = ON_THREADS - 1;
-                    println!("OH NO BAD Status Code Recived is {} Please lower threads!", data.to_string());
+                    println!(
+                        "OH NO BAD Status Code Recived is {} Please lower threads!",
+                        data.to_string()
+                    );
                 }
             }
         });
