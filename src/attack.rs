@@ -24,7 +24,6 @@ unsafe fn core_attack() {
                 let error_data = request(&crate::ATTACK_URL).await;
                 match error_data {
                     Ok(status_code) => {
-                        AMOUNT = AMOUNT + 1;
                         println!(
                             "Passed: {}, On threads: {}, Status code {}",
                             AMOUNT,
@@ -34,11 +33,14 @@ unsafe fn core_attack() {
                     }
                     Err(data) => {
                         println!(
-                            "OH NO BAD Status Code Recived is {} Please lower threads!",
+                            "Passed: {}, On threads: {}, Status ERROR(your MAY need to lower threads) {}",
+                            AMOUNT,
+                            ON_THREADS,
                             data.to_string()
                         );
                     }
                 }
+                AMOUNT = AMOUNT + 1;
             }
         });
     } else {
