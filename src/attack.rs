@@ -2,6 +2,7 @@ use core::time;
 use std::thread;
 
 use reqwest::Response;
+use tokio::time::Instant;
 
 static mut AMOUNT: u128 = 0;
 
@@ -21,30 +22,41 @@ unsafe fn core_attack() {
         ON_THREADS = ON_THREADS + 1;
         tokio::spawn(async {
             loop {
+                let now = Instant::now();
                 let error_data = request(&crate::ATTACK_URL).await;
                 match error_data {
                     Ok(status_code) => {
+                        AMOUNT = AMOUNT + 1;
                         println!(
-                            "Passed: {}, On threads: {}, Status code {}",
-                            AMOUNT,
+                            "On threads: {}, Status code {}, Time Passed for request {} sec, Request per 10 Millsecond {}",
                             ON_THREADS,
-                            status_code.status()
+                            status_code.status(),
+                            now.elapsed().as_secs(),
+                            AMOUNT
                         );
                     }
                     Err(data) => {
                         println!(
-                            "Passed: {}, On threads: {}, Status ERROR(your MAY need to lower threads) {}",
-                            AMOUNT,
+                            "On threads: {}, Status ERROR {} Request per 10 Millsecond {}",
                             ON_THREADS,
-                            data.to_string()
+                            data.to_string(),
+                            AMOUNT
                         );
                     }
                 }
-                AMOUNT = AMOUNT + 1;
             }
         });
     } else {
-        loop {}
+        time_funtion();
+    }
+}
+
+fn time_funtion() {
+    loop {
+        thread::sleep(time::Duration::from_millis(10));
+        unsafe {
+            AMOUNT = 0;
+        }
     }
 }
 
