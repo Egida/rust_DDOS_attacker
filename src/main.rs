@@ -6,5 +6,5 @@ async fn main() {
 
 pub static ATTACK_URL: &str = "https://SecretWindingAttributes.carghai74.repl.co";
 
-pub static FORCE: u128 = 4000;
-// 4000 to can take down a replit flask api
+pub static FORCE: u128 = 3000;
+// 3000 to can take down a replit flask api
