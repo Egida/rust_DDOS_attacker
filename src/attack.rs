@@ -21,10 +21,10 @@ unsafe fn core_attack() {
         ON_THREADS = ON_THREADS + 1;
         tokio::spawn(async {
             loop {
-                AMOUNT = AMOUNT + 1;
                 let error_data = request(&crate::ATTACK_URL).await;
                 match error_data {
                     Ok(status_code) => {
+                        AMOUNT = AMOUNT + 1;
                         println!(
                             "Passed: {}, On threads: {}, Status code {}",
                             AMOUNT,
