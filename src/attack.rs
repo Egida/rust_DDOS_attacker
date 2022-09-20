@@ -20,7 +20,7 @@ unsafe fn starting_attack() {
     loop {
         if ON_THREADS < crate::FORCE - 600 {
             core_attack();
-            thread::sleep(time::Duration::from_millis(2));
+            thread::sleep(time::Duration::from_millis(1));
         } else {
             break;
         }
