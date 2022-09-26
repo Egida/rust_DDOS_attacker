@@ -23,8 +23,8 @@ unsafe fn core_attack() {
         tokio::spawn(async {
             loop {
                 let now = Instant::now();
-                let error_data = request(crate::ATTACK_URL).await;
-                match error_data {
+                let error_data = request(crate::ATTACK_URL);
+                match error_data.await {
                     Ok(status_code) => {
                         AMOUNT += 1;
                         println!(
