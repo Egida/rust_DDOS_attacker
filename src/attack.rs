@@ -41,7 +41,6 @@ fn core_attack() {
                                     status_code.status(),
                                     now.elapsed().as_secs(),
                                     AMOUNT,
-
                                 );
                             }
                             Err(data) => unsafe {
@@ -55,28 +54,18 @@ fn core_attack() {
                     }
                 });
             } else {
-                time_function();
+                unsafe {
+                    time_function();
+                }
             }
         }
     }
 }
 
-fn time_function() {
+unsafe fn time_function() {
     loop {
-        let error_threads = PUB_VAR.lock();
-        match error_threads {
-            Err(_) => {
-                thread::sleep(time::Duration::from_millis(2));
-            }
-            Ok(data) => unsafe {
-                println!("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-                loop {
-                    AMOUNT = 0;
-                    println!("threads on: {}, time passed: {}", data.thread_on, AMOUNT);
-                    thread::sleep(time::Duration::from_millis(10));
-                }
-            }
-        }
+        AMOUNT = 0;
+        thread::sleep(time::Duration::from_millis(10));
     }
 }
 
