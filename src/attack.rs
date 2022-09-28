@@ -54,18 +54,19 @@ fn core_attack() {
                     }
                 });
             } else {
-                unsafe {
-                    time_function();
-                }
+                time_function();
             }
         }
     }
 }
 
-unsafe fn time_function() {
-    loop {
-        AMOUNT = 0;
-        thread::sleep(time::Duration::from_millis(10));
+fn time_function() {
+    unsafe {
+        THREADS_ON += 1;
+        loop {
+            AMOUNT = 0;
+            thread::sleep(time::Duration::from_millis(10));
+        }
     }
 }
 
