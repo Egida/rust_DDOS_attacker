@@ -15,3 +15,9 @@ pub static PUB_VAR: Lazy<Mutex<GlobalVar>> = Lazy::new(|| {
         force: 0,
     })
 });
+
+
+
+pub static mut AMOUNT: u128 = 0;
+
+pub static mut THREADS_ON: u128 = 0;

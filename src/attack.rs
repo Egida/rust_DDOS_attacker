@@ -4,12 +4,7 @@ use std::thread;
 use reqwest::Response;
 use tokio::time::Instant;
 
-use crate::ram_manger::PUB_VAR;
-
-static mut AMOUNT: u128 = 0;
-
-static mut THREADS_ON: u128 = 0;
-
+use crate::ram_manger::{AMOUNT, PUB_VAR, THREADS_ON};
 
 pub async fn start() {
     loop {
@@ -71,9 +66,5 @@ fn time_function() {
 }
 
 async fn request(url: &str) -> Result<Response, reqwest::Error> {
-    let output = reqwest::Client::new().get(url).send().await;
-    match output {
-        Ok(data) => Ok(data),
-        Err(err) => Err(err),
-    }
+    reqwest::Client::new().get(url).send().await
 }
