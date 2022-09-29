@@ -1,0 +1,35 @@
+use std::io;
+use crate::ram_manger::ATTACK_URL;
+
+pub struct AttackData {
+    pub threads: u128,
+}
+
+pub fn where_attack() -> AttackData {
+    let mut return_data = AttackData {
+        threads: 0,
+    };
+    println!("Where to attack?(give url)");
+    unsafe {
+        io::stdin()
+            .read_line(&mut ATTACK_URL)
+            .expect("Failed to read input");
+    }
+    loop {
+        let mut unparsed_str = "".to_owned();
+        println!("Threads?");
+        io::stdin()
+            .read_line(&mut unparsed_str)
+            .expect("Failed to read input");
+        match unparsed_str.trim().parse() {
+            Ok(num) => {
+                return_data.threads = num;
+                break;
+            }
+            Err(e) => {
+                println!("please write proper number\n (advanced error details: {})", e);
+            }
+        }
+    }
+    return_data
+}

@@ -1,9 +1,11 @@
 mod attack;
 mod ram_manger;
+mod where_attack;
 
 #[tokio::main]
 async fn main() {
-    attack::start().await;
+    let init_data = where_attack::where_attack();
+    attack::start(init_data).await;
 }
 
 pub static ATTACK_URL: &str = "https://SameSpottedStaff.carghai74.repl.co";

