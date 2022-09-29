@@ -1,5 +1,5 @@
 use std::io;
-use crate::ram_manger::ATTACK_URL;
+use crate::ram_manger::{UNSAFEPUBVAR};
 
 pub struct AttackData {
     pub threads: u128,
@@ -12,7 +12,7 @@ pub fn where_attack() -> AttackData {
     println!("Where to attack?(give url)");
     unsafe {
         io::stdin()
-            .read_line(&mut ATTACK_URL)
+            .read_line(&mut UNSAFEPUBVAR.attack_url)
             .expect("Failed to read input");
     }
     loop {
