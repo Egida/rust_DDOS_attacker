@@ -21,7 +21,7 @@ pub struct UnsafePubVar {
     pub threads_on: u128,
 }
 
-pub static mut UNSAFEPUBVAR: Lazy<UnsafePubVar> = Lazy::new(|| {
+pub static mut UNSAFE_PUB_VAR: Lazy<UnsafePubVar> = Lazy::new(|| {
     UnsafePubVar {
         attack_url: "".to_owned(),
         amount_sent: 0,

