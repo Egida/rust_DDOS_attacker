@@ -25,7 +25,7 @@ fn core_attack(passed_var: &AttackData) {
                     loop {
                         let now = Instant::now();
                         unsafe {
-                            let error_data = request(&UNSAFE_PUB_VAR.attack_url);
+                            let error_data = extra_fn::request(&UNSAFE_PUB_VAR.attack_url);
                             match error_data.await {
                                 Ok(status_code) => {
                                     UNSAFE_PUB_VAR.amount_sent += 1;

@@ -12,6 +12,6 @@ pub(crate) fn time_function() {
     }
 }
 
-async fn request(url: &String) -> Result<Response, reqwest::Error> {
+pub(crate) async fn request(url: &String) -> Result<Response, reqwest::Error> {
     reqwest::Client::new().get(url).send().await
 }
