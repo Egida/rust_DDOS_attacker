@@ -42,7 +42,8 @@ fn core_attack(passed_var: &AttackData) {
                                 }
                                 Err(data) => {
                                     println!(
-                                        "Status ERROR {}\n Time: {}\n Request per 10 Millisecond {}",
+                                        "Threads on {}, Status ERROR {}\n Time: {}\n Request per 10 Millisecond {}",
+                                        UNSAFE_PUB_VAR.threads_on,
                                         data,
                                         now.elapsed().as_secs(),
                                         UNSAFE_PUB_VAR.amount_sent

@@ -17,7 +17,7 @@ pub fn where_attack() -> AttackData {
     }
     loop {
         let mut unparsed_str = "".to_owned();
-        println!("Threads?");
+        println!("Threads? (if you get a dns error lower threads)");
         io::stdin()
             .read_line(&mut unparsed_str)
             .expect("Failed to read input");
