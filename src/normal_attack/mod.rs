@@ -13,7 +13,9 @@ pub async fn start(passed_var: AttackData) {
 fn core_attack(passed_var: &AttackData) {
     let error_threads = SAFE_PUB_VAR.lock();
     match error_threads {
-        Err(_) => {}
+        Err(e) => {
+            println!("error when starting thread: {}", e)
+        }
         Ok(mut threads) => {
             if threads.thread_on + 1 < passed_var.threads {
                 threads.thread_on += 1;

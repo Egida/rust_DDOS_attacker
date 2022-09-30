@@ -1,4 +1,3 @@
-use tokio::time::Instant;
 
 use crate::extra_fn;
 use crate::ram_manger::{SAFE_PUB_VAR, UNSAFE_PUB_VAR};
@@ -13,7 +12,9 @@ pub async fn start(passed_var: AttackData) {
 fn core_attack(passed_var: &AttackData) {
     let error_threads = SAFE_PUB_VAR.lock();
     match error_threads {
-        Err(_) => {}
+        Err(e) => {
+            println!("error when starting thread: {}", e)
+        }
         Ok(mut threads) => {
             if threads.thread_on + 1 < passed_var.threads {
                 threads.thread_on += 1;
@@ -26,7 +27,7 @@ fn core_attack(passed_var: &AttackData) {
                         let error_data = extra_fn::request(&UNSAFE_PUB_VAR.attack_url);
                         match error_data.await {
                             Ok(status_code) => {
-                                let wait = modify_pub_data(false);
+                                let wait = modify_pub_data(true);
                                 UNSAFE_PUB_VAR.amount_sent += 1;
                                 println!(
                                     "Threads on {},\n Status code {},\n Request sent {}",
@@ -55,14 +56,14 @@ fn core_attack(passed_var: &AttackData) {
 }
 
 
-async fn modify_pub_data(add: bool) {
+async unsafe fn modify_pub_data(add: bool) {
     loop {
-        let error_threads = SAFE_PUB_VAR.lock();
-        if let Ok(mut data) = error_threads {
+        if let Ok(mut data) = SAFE_PUB_VAR.lock() {
             if add {
-                data.thread_on += 1;
-            } else {
                 data.thread_on -= 1;
+            } else {
+                UNSAFE_PUB_VAR.threads_on -= 1;
+                data.thread_on += 10;
             }
             break;
         }
