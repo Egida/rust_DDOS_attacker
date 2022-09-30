@@ -1,8 +1,5 @@
-use core::time;
-use std::thread;
-
-use reqwest::Response;
 use tokio::time::Instant;
+use crate::extra_fn;
 
 use crate::ram_manger::{SAFE_PUB_VAR, UNSAFE_PUB_VAR};
 use crate::where_attack::AttackData;
@@ -54,22 +51,9 @@ fn core_attack(passed_var: &AttackData) {
                     }
                 });
             } else {
-                time_function();
+                extra_fn::time_function();
             }
         }
     }
 }
 
-fn time_function() {
-    unsafe {
-        UNSAFE_PUB_VAR.threads_on += 1;
-        loop {
-            UNSAFE_PUB_VAR.amount_sent = 0;
-            thread::sleep(time::Duration::from_millis(10));
-        }
-    }
-}
-
-async fn request(url: &String) -> Result<Response, reqwest::Error> {
-    reqwest::Client::new().get(url).send().await
-}
