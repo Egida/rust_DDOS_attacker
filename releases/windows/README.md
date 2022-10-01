@@ -1,4 +1,4 @@
-# Sorry But Windows exe does not exist
+# Sorry but Windows exe does not exist
 
 ## what should I do? 
 try this 
