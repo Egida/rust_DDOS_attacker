@@ -1,15 +1,13 @@
 use std::io;
 
-use crate::ram_manger::UNSAFE_PUB_VAR;
+use crate::ram_manger::{SAFE_PUB_VAR, UNSAFE_PUB_VAR};
 
 pub struct AttackData {
-    pub threads: u128,
     pub ai_mode: bool,
 }
 
 pub fn where_attack() -> AttackData {
     let mut return_data = AttackData {
-        threads: 0,
         ai_mode: false,
     };
     println!("Where to attack?(give url)");
@@ -18,7 +16,7 @@ pub fn where_attack() -> AttackData {
             .read_line(&mut UNSAFE_PUB_VAR.attack_url)
             .expect("Failed to read input");
     }
-    println!("Ai Mode?(y/n)");
+    println!("Ai Mode?(y/n), Warning DDOS ai is very unstable and may not work as expected!");
     loop {
         let mut unparsed_str = "".to_owned();
         io::stdin()
@@ -46,7 +44,7 @@ pub fn where_attack() -> AttackData {
             .expect("Failed to read input");
         match unparsed_str.trim().parse() {
             Ok(num) => {
-                return_data.threads = num;
+                SAFE_PUB_VAR.lock().expect("failure when parsing").threads_allowed = num;
                 break;
             }
             Err(e) => {
@@ -56,3 +54,4 @@ pub fn where_attack() -> AttackData {
     }
     return_data
 }
+

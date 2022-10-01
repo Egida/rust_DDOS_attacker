@@ -4,9 +4,9 @@ use crate::ram_manger::UNSAFE_PUB_VAR;
 
 pub(crate) fn time_function() {
     unsafe {
-        UNSAFE_PUB_VAR.threads_on += 1;
+        UNSAFE_PUB_VAR.threads_on += 1.0;
         loop {
-            UNSAFE_PUB_VAR.amount_sent = 0;
+            UNSAFE_PUB_VAR.amount_sent = 0.0;
             thread::sleep(time::Duration::from_millis(10));
         }
     }

@@ -11,9 +11,9 @@ mod ai_attack;
 async fn main() {
     let init_data = where_attack::where_attack();
     if init_data.ai_mode {
-        ai_attack::start(init_data).await;
+        ai_attack::start().await;
     } else {
-        normal_attack::start(init_data).await;
+        normal_attack::start().await;
     }
 }
 
