@@ -15,4 +15,8 @@ I have tested with an i5 linux laptop and on stable internet I was able to take 
 
 ## How should I use it?
 
-go to release directory to see info on how to download the file. 
+go to release directory to see info on how to download the file then.
+
+``
+chmod +x dos_attacker
+``
