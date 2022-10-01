@@ -12,4 +12,4 @@ cargo run --release
 
 ## Will windows support ever come?
 
-yes  but i do not own a Windows computer, so I cannot build it for windows.
+yes however, I do not own a Windows computer, so I cannot build it for windows.
