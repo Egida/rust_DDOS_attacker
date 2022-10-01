@@ -20,3 +20,7 @@ go to release directory to see info on how to download the file then.
 ``
 chmod +x dos_attacker
 ``
+then do 
+``
+./dos_attacker
+``
