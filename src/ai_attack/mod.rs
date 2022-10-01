@@ -63,13 +63,14 @@ async fn modify_pub_data(add: bool) {
     loop {
         if let Ok(mut data) = SAFE_PUB_VAR.lock() {
             if add {
-                data.threads_allowed += 0.01;
-            } else if data.threads_allowed > 0.0 && !add {
-                data.threads_allowed -= 0.05;
-                println!("{}", &data.threads_allowed);
+                data.threads_allowed += 0.05;
+            } else if data.threads_allowed > 1.5 && !add {
+                data.threads_allowed -= 0.5;
+            } else if data.threads_allowed <= 1.5 && !add {
+                panic!("fatal error occurred when sending requests, for more info scroll up this is a forced error by author")
             }
             data.thread_on -= 1.0;
-            drop(data);
+            println!("changing threads to: {}", &data.threads_allowed);
             break;
         }
     }

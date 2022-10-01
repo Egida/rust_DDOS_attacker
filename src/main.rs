@@ -1,6 +1,3 @@
-extern crate core;
-
-
 mod normal_attack;
 mod ram_manger;
 mod where_attack;

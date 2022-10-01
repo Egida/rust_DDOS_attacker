@@ -16,7 +16,7 @@ pub fn where_attack() -> AttackData {
             .read_line(&mut UNSAFE_PUB_VAR.attack_url)
             .expect("Failed to read input");
     }
-    println!("Ai Mode?(y/n), Warning DDOS ai is very unstable and may not work as expected!");
+    println!("Ai Mode?(y/n), This is helpful if you have a fast pc and/or you bottle neck is your wifi!");
     loop {
         let mut unparsed_str = "".to_owned();
         io::stdin()
