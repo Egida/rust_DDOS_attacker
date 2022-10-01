@@ -1,11 +1,19 @@
-mod attack;
+mod normal_attack;
+mod ram_manger;
+mod where_attack;
+mod extra_fn;
+mod ai_attack;
+
 #[tokio::main]
 async fn main() {
-    attack::start().await;
+    let init_data = where_attack::where_attack();
+    if init_data.ai_mode {
+        ai_attack::start().await;
+    } else {
+        normal_attack::start().await;
+    }
 }
 
-pub static ATTACK_URL: &str = "https://carghaiapi.herokuapp.com";
-pub static FORCE: u128 = 2500;
 // 2000 to can take down a replit flask api
 // This is the code
 // app.route('/hard')
