@@ -36,8 +36,8 @@ fn core_attack() {
                                 UNSAFE_PUB_VAR.amount_sent,
                                 now.elapsed().as_secs()
                             );
-                            wait.await;
                             UNSAFE_PUB_VAR.threads_on -= 1.0;
+                            wait.await;
                         }
                         Err(data) => {
                             let wait = modify_pub_data(false);
@@ -48,8 +48,8 @@ fn core_attack() {
                                 UNSAFE_PUB_VAR.amount_sent,
                                 now.elapsed().as_secs()
                             );
-                            wait.await;
                             UNSAFE_PUB_VAR.threads_on -= 1.0;
+                            wait.await;
                         }
                     }
                 }

@@ -23,4 +23,4 @@ chmod +x dos_attacker
 then do 
 ``
 ./dos_attacker
-``
+``  make sure you have open SLL installed!
