@@ -21,12 +21,14 @@ pub struct UnsafePubVar {
     pub attack_url: String,
     pub amount_sent: f64,
     pub threads_on: f64,
+    pub http_sender : reqwest::Client
 }
 
 pub static mut UNSAFE_PUB_VAR: Lazy<UnsafePubVar> = Lazy::new(|| {
     UnsafePubVar {
         attack_url: "".to_owned(),
         amount_sent: 0.0,
-        threads_on: 0.0
+        threads_on: 0.0,
+        http_sender : reqwest::Client::new()
     }
 });

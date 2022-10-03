@@ -18,9 +18,9 @@ I have tested with an i5 linux laptop and on stable internet I was able to take 
 go to release directory to see info on how to download the file then.
 
 ``
-chmod +x dos_attacker
+git clone https://github.com/carghai/rust_DDOS_attacker
 ``
 then do 
 ``
-./dos_attacker
+cargo run --release
 ``  make sure you have open SLL installed!

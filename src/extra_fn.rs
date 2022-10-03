@@ -1,5 +1,7 @@
 use std::{thread, time};
-use reqwest::Response;
+
+use reqwest::{Error, Response};
+
 use crate::ram_manger::UNSAFE_PUB_VAR;
 
 pub(crate) fn time_function() {
@@ -12,6 +14,36 @@ pub(crate) fn time_function() {
     }
 }
 
-pub(crate) async fn request(url: &String) -> Result<Response, reqwest::Error> {
-    reqwest::Client::new().get(url).send().await
+
+pub(crate) fn proxy_set(url: &str, proxy: bool) -> Result<String, Error> {
+    if proxy {
+        let proxy_set = reqwest::Proxy::all(url);
+        match proxy_set {
+            Err(e) => Err(e),
+            Ok(good) => {
+                let final_check = reqwest::Client::builder()
+                    .proxy(good)
+                    .build();
+                match final_check {
+                    Err(e) => Err(e),
+                    Ok(final_data) => unsafe {
+                        UNSAFE_PUB_VAR.http_sender = final_data;
+                        Ok("Proxy has been set!".to_owned())
+                    }
+                }
+            }
+        }
+    } else {
+        unsafe {
+            UNSAFE_PUB_VAR.http_sender = reqwest::Client::new();
+        }
+        Ok("Set http client with no proxy successfully!".to_owned())
+    }
 }
+
+pub(crate) async unsafe fn request(url: &String) -> Result<Response, reqwest::Error> {
+    UNSAFE_PUB_VAR.http_sender.get(url).send().await
+}
+
+
+

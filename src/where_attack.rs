@@ -1,5 +1,6 @@
 use std::io;
 
+use crate::extra_fn::proxy_set;
 use crate::ram_manger::{SAFE_PUB_VAR, UNSAFE_PUB_VAR};
 
 pub struct AttackData {
@@ -49,6 +50,29 @@ pub fn where_attack() -> AttackData {
             }
             Err(e) => {
                 println!("please write proper number\n (advanced error details: {})", e);
+            }
+        }
+    }
+    loop {
+        let mut unparsed_str = "".to_owned();
+        println!("Proxy? (if you don't want one hit n)");
+        io::stdin()
+            .read_line(&mut unparsed_str)
+            .expect("Failed to read input");
+        match unparsed_str.trim() {
+            "n" => {
+                println!("{}", proxy_set("", false).expect("Failed when setting http client"));
+                break;
+            }
+            _ => {
+                let error = proxy_set(unparsed_str.trim(), true);
+                match error {
+                    Err(e) => println!("{}", e),
+                    Ok(yay) => {
+                        println!("{}", yay);
+                        break;
+                    }
+                }
             }
         }
     }
