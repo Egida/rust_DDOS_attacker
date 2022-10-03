@@ -34,6 +34,7 @@ fn core_attack() {
                                 add().await;
                             }
                             UNSAFE_PUB_VAR.amount_sent += 1.0;
+                            UNSAFE_PUB_VAR.threads_on -= 1.0;
                             println!(
                                 "Threads on {},\n Status code {},\n Request sent per 10 mil {}\n Time Elapsed {}",
                                 UNSAFE_PUB_VAR.threads_on,
@@ -41,7 +42,6 @@ fn core_attack() {
                                 UNSAFE_PUB_VAR.amount_sent,
                                 now.elapsed().as_secs()
                             );
-                            UNSAFE_PUB_VAR.threads_on -= 1.0;
                         }
                         Err(data) => {
                             let wait = subtract();
