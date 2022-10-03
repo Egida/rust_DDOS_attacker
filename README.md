@@ -3,7 +3,7 @@
 ## Why should I use it?
 
 It has unrivaled speeds because it is built in rust and hand optimized. It also comes with an AI mode that automatically finds how many threads is needed. Plus the whole code base is 100% open source!
-
+It even includes proxy's to hide your ip!
 
 ## What is this program? 
 
