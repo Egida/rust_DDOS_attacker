@@ -4,6 +4,9 @@ use crate::extra_fn;
 use crate::ram_manger::{SAFE_PUB_VAR, UNSAFE_PUB_VAR};
 
 pub async fn start() {
+    tokio::spawn(async {
+        extra_fn::time_function()
+    });
     loop {
         core_attack();
     }
@@ -30,7 +33,7 @@ fn core_attack() {
                             let wait = modify_pub_data(add_or_not);
                             UNSAFE_PUB_VAR.amount_sent += 1.0;
                             println!(
-                                "Threads on {},\n Status code {},\n Request sent {}\n Time Elapsed {}",
+                                "Threads on {},\n Status code {},\n Request sent per 10 mil {}\n Time Elapsed {}",
                                 UNSAFE_PUB_VAR.threads_on,
                                 status_code.status(),
                                 UNSAFE_PUB_VAR.amount_sent,
@@ -42,7 +45,7 @@ fn core_attack() {
                         Err(data) => {
                             let wait = modify_pub_data(false);
                             println!(
-                                "Threads on {}, Status ERROR {}\n Request sent {}\n, Time Elapsed {}",
+                                "Threads on {}, Status ERROR {}\n  Request sent per 10 mil {}\n, Time Elapsed {}",
                                 UNSAFE_PUB_VAR.threads_on,
                                 data,
                                 UNSAFE_PUB_VAR.amount_sent,
