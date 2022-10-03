@@ -25,5 +25,8 @@ then do
 cargo run --release
 ``  make sure you have open SLL installed!
 
+# Legal Notice:
 
 ## I'M NOT LIABLE FOR ANY DAMAGE CAUSED, THIS IS A CONSTRUCTIVE TOOL
+
+## Check licence for more legal notes
