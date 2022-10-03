@@ -1,7 +1,8 @@
+use std::sync::MutexGuard;
 use tokio::time::Instant;
 
 use crate::extra_fn;
-use crate::ram_manger::{SAFE_PUB_VAR, UNSAFE_PUB_VAR};
+use crate::ram_manger::{SAFE_PUB_VAR, SafeGlobalVar, UNSAFE_PUB_VAR};
 
 pub async fn start() {
     tokio::spawn(async {
@@ -61,6 +62,14 @@ fn core_attack() {
     }
 }
 
+
+fn get_pub_var() -> MutexGuard<'_, SafeGlobalVar> {
+    loop {
+        if let Ok(mut data) = SAFE_PUB_VAR.lock() {
+           return data;
+        }
+    }
+}
 
 async fn modify_pub_data(add: bool) {
     loop {
