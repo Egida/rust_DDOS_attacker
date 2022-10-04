@@ -19,8 +19,7 @@ async fn core_attack() {
         if threads.thread_on + 1.0 < threads.threads_allowed {
             add_start(threads);
             tokio::spawn(async {
-                let now = Instant::now();
-                let error_data = request();
+                let (now, error_data) = (Instant::now(), request());
                 match error_data.await {
                     Ok(status_code) => unsafe {
                         UNSAFE_PUB_VAR.amount_sent += 1.0;
