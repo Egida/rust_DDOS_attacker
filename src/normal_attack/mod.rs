@@ -1,11 +1,19 @@
-use tokio::time::Instant;
+pub mod udp_version;
 
+use tokio::time::Instant;
 use crate::extra_fn::{add_start, request, time_function};
 use crate::ram_manger::{SAFE_PUB_VAR, UNSAFE_PUB_VAR};
+use crate::where_attack::AttackData;
 
-pub async fn start() {
-    loop {
-        core_attack().await;
+pub async fn start(data: AttackData) {
+    if data.udp_mode {
+        loop {
+            udp_version::core_attack().await;
+        }
+    }else {
+        loop {
+            core_attack().await;
+        }
     }
 }
 

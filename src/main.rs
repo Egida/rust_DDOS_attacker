@@ -10,7 +10,7 @@ async fn main() {
     if init_data.ai_mode {
         ai_attack::start().await;
     } else {
-        normal_attack::start().await;
+        normal_attack::start(init_data).await;
     }
 }
 

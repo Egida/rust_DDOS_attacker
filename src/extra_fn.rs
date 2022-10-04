@@ -1,4 +1,5 @@
 use std::{thread, time};
+use std::net::UdpSocket;
 use std::sync::MutexGuard;
 
 use reqwest::{Error, Response};
@@ -55,7 +56,11 @@ pub(crate) fn add_start(mut val : MutexGuard<'static,SafeGlobalVar>) {
     }
 }
 
-
+pub(crate) async  fn udp() -> std::io::Result<UdpSocket> {
+    unsafe {
+         UdpSocket::bind(&UNSAFE_PUB_VAR.attack_url)
+    }
+}
 
 
 
