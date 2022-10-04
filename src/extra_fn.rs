@@ -41,8 +41,8 @@ pub(crate) fn proxy_set(url: &str, proxy: bool) -> Result<String, Error> {
     }
 }
 
-pub(crate) async unsafe fn request(url: &String) -> Result<Response, reqwest::Error> {
-    UNSAFE_PUB_VAR.http_sender.get(url).send().await
+pub(crate) async unsafe fn request() -> Result<Response, Error> {
+    UNSAFE_PUB_VAR.http_sender.get(&UNSAFE_PUB_VAR.attack_url).send().await
 }
 
 
