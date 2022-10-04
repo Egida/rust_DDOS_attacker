@@ -1,8 +1,9 @@
 use std::{thread, time};
+use std::sync::MutexGuard;
 
 use reqwest::{Error, Response};
 
-use crate::ram_manger::UNSAFE_PUB_VAR;
+use crate::ram_manger::{SafeGlobalVar, UNSAFE_PUB_VAR};
 
 pub(crate) fn time_function() {
     unsafe {
@@ -46,6 +47,15 @@ pub(crate) async fn request() -> Result<Response, Error> {
         UNSAFE_PUB_VAR.http_sender.get(&UNSAFE_PUB_VAR.attack_url).send().await
     }
 }
+
+pub(crate) fn add_start(mut val : MutexGuard<'static,SafeGlobalVar>) {
+    val.thread_on += 1.0;
+    unsafe {
+        UNSAFE_PUB_VAR.threads_on += 1.0;
+    }
+}
+
+
 
 
 

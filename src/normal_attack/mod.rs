@@ -1,26 +1,22 @@
 use tokio::time::Instant;
 
-use crate::extra_fn;
+use crate::extra_fn::{add_start, request, time_function};
 use crate::ram_manger::{SAFE_PUB_VAR, UNSAFE_PUB_VAR};
 
 pub async fn start() {
     loop {
-        core_attack();
+        core_attack().await;
     }
 }
 
-fn core_attack() {
-    if let Ok(mut threads) = SAFE_PUB_VAR.lock() {
+async fn core_attack() {
+    if let Ok(threads) = SAFE_PUB_VAR.lock() {
         if threads.thread_on + 1.0 < threads.threads_allowed {
-            threads.thread_on += 1.0;
-            unsafe {
-                UNSAFE_PUB_VAR.threads_on += 1.0;
-            }
-            drop(threads);
+            add_start(threads);
             tokio::spawn(async {
                 loop {
                     let now = Instant::now();
-                    let error_data = extra_fn::request();
+                    let error_data = request();
                     match error_data.await {
                         Ok(status_code) => unsafe {
                             UNSAFE_PUB_VAR.amount_sent += 1.0;
@@ -45,7 +41,7 @@ fn core_attack() {
                 }
             });
         } else {
-            extra_fn::time_function();
+            time_function();
         }
     }
 }
