@@ -56,10 +56,9 @@ pub(crate) fn add_start(mut val : MutexGuard<'static,SafeGlobalVar>) {
     }
 }
 
-pub(crate) async  fn udp() -> std::io::Result<UdpSocket> {
-    unsafe {
-         UdpSocket::bind(&UNSAFE_PUB_VAR.attack_url)
-    }
+pub(crate) fn udp() -> std::io::Result<UdpSocket> {
+         UdpSocket::bind("0.0.0.0:8080")
+
 }
 
 

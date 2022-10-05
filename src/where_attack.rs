@@ -17,10 +17,10 @@ pub fn where_attack() -> AttackData {
     unsafe {
         io::stdin()
             .read_line(&mut UNSAFE_PUB_VAR.attack_url)
-            .expect("Failed to read input");
+        .expect("Failed to read input");
         UNSAFE_PUB_VAR.attack_url = UNSAFE_PUB_VAR.attack_url.trim().to_owned();
     }
-    println!("Do you want to use UDP");
+    println!("Do you want to use UDP(y or n)");
     return_data.udp_mode = true_or_no();
     if !return_data.udp_mode {
         println!("Ai Mode?(y/n), This is helpful if you have a fast pc and/or you bottle neck is your wifi!");
