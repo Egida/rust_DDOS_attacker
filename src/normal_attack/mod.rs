@@ -1,17 +1,23 @@
-pub mod udp_version;
-
 use tokio::time::Instant;
+
 use crate::extra_fn::{add_start, request, time_function, udp};
 use crate::ram_manger::{SAFE_PUB_VAR, UNSAFE_PUB_VAR};
 use crate::where_attack::AttackData;
 
+pub mod udp_version;
+
 pub async fn start(data: AttackData) {
     if data.udp_mode {
-        let val = udp().unwrap();
+        let val = udp().expect("Please make sure port 8000 is available");
         loop {
-            udp_version::core_attack(val.try_clone().unwrap());
+            match val.try_clone() {
+                Ok(pass_on) => udp_version::core_attack(pass_on),
+                Err(e) => {
+                    println!("failed starting socket: {}", e)
+                }
+            }
         }
-    }else {
+    } else {
         loop {
             core_attack().await;
         }
