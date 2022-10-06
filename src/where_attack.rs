@@ -90,14 +90,12 @@ fn true_or_no() -> bool {
 
 fn get_input(input: &mut String) {
     loop {
-        unsafe {
-            let error = io::stdin()
-                .read_line(input);
-            if error.is_ok() {
-                return;
-            } else {
-                println!("please try again");
-            }
+        let error = io::stdin()
+            .read_line(input);
+        if error.is_ok() {
+            return;
+        } else {
+            println!("please try again");
         }
     }
 }
