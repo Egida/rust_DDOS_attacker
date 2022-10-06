@@ -8,7 +8,7 @@ pub mod udp_version;
 
 pub async fn start(data: AttackData) {
     if data.udp_mode {
-        let val = udp();
+        let val = &udp();
         loop {
             match val.try_clone() {
                 Ok(pass_on) => udp_version::core_attack(pass_on),
