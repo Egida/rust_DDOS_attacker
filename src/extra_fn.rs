@@ -61,9 +61,9 @@ pub(crate) fn udp() -> UdpSocket {
     loop {
         match UdpSocket::bind("0.0.0.0:8080") {
             Ok(data) => { return data; }
-            Err(_) => {
+            Err(data) => {
                 if error_much > 10 {
-                    panic!("Failed when starting udp, please check 8080 port and try again");
+                    panic!("Failed when starting udp, please check 8080 port and try again\n {}" , data);
                 }
                 thread::sleep(time::Duration::from_millis(20));
                 error_much += 1;
