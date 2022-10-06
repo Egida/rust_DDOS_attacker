@@ -15,9 +15,7 @@ pub fn where_attack() -> AttackData {
     };
     println!("Where to attack?(give url)");
     unsafe {
-        io::stdin()
-            .read_line(&mut UNSAFE_PUB_VAR.attack_url)
-        .expect("Failed to read input");
+        get_input(&mut UNSAFE_PUB_VAR.attack_url);
         UNSAFE_PUB_VAR.attack_url = UNSAFE_PUB_VAR.attack_url.trim().to_owned();
     }
     println!("Do you want to use UDP(y or n)");
@@ -29,9 +27,7 @@ pub fn where_attack() -> AttackData {
         loop {
             let mut unparsed_str = "".to_owned();
             println!("Proxy? (if you don't want one hit n)");
-            io::stdin()
-                .read_line(&mut unparsed_str)
-                .expect("Failed to read input");
+            get_input(&mut unparsed_str);
             match unparsed_str.trim() {
                 "n" => {
                     println!("{}", proxy_set("", false).expect("Failed when setting http client"));
@@ -55,9 +51,7 @@ pub fn where_attack() -> AttackData {
     loop {
         let mut unparsed_str = "".to_owned();
         println!("Threads? (if you get a dns error lower threads)");
-        io::stdin()
-            .read_line(&mut unparsed_str)
-            .expect("Failed to read input");
+        get_input(&mut unparsed_str);
         match unparsed_str.trim().parse() {
             Ok(num) => {
                 SAFE_PUB_VAR.lock().expect("failure when parsing").threads_allowed = num;
@@ -75,9 +69,7 @@ pub fn where_attack() -> AttackData {
 fn true_or_no() -> bool {
     loop {
         let mut unparsed_str = "".to_owned();
-        io::stdin()
-            .read_line(&mut unparsed_str)
-            .expect("Failed to read input");
+        get_input(&mut unparsed_str);
         match unparsed_str.trim() {
             "y" => {
                 return true;
@@ -88,6 +80,21 @@ fn true_or_no() -> bool {
             _ => {
                 println!("please say y or n");
             }
+        }
+    }
+}
+
+fn get_input(input: &mut String) {
+    loop {
+        unsafe {
+            let error = io::stdin()
+                .read_line(input);
+            if error.is_ok() {
+                return;
+            } else {
+                println!("please try again");
+            }
+            UNSAFE_PUB_VAR.attack_url = UNSAFE_PUB_VAR.attack_url.trim().to_owned();
         }
     }
 }
