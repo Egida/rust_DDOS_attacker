@@ -54,8 +54,12 @@ pub fn where_attack() -> AttackData {
         get_input(&mut unparsed_str);
         match unparsed_str.trim().parse() {
             Ok(num) => {
-                SAFE_PUB_VAR.lock().expect("failure when parsing").threads_allowed = num;
-                break;
+                if let Ok(mut data) = SAFE_PUB_VAR.lock() {
+                    data.threads_allowed = num;
+                    break;
+                } else {
+                    println!("waiting on file lock");
+                }
             }
             Err(e) => {
                 println!("please write proper number\n (advanced error details: {})", e);
@@ -94,7 +98,6 @@ fn get_input(input: &mut String) {
             } else {
                 println!("please try again");
             }
-            UNSAFE_PUB_VAR.attack_url = UNSAFE_PUB_VAR.attack_url.trim().to_owned();
         }
     }
 }
