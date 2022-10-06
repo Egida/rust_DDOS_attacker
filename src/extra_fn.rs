@@ -56,8 +56,20 @@ pub(crate) fn add_start(mut val : MutexGuard<'static,SafeGlobalVar>) {
     }
 }
 
-pub(crate) fn udp() -> std::io::Result<UdpSocket> {
-         UdpSocket::bind("0.0.0.0:8080")
+pub(crate) fn udp() -> UdpSocket {
+    let mut error_much: u8 = 0;
+    loop {
+        let result  = UdpSocket::bind("0.0.0.0:8080");
+        if let Ok(data) = result {
+           return data;
+        } else {
+            if error_much > 10 {
+                panic!("Failed when starting udp, please check 8080 port and try again");
+            }
+            thread::sleep(time::Duration::from_millis(20));
+            error_much += 1;
+        }
+    }
 }
 
 
