@@ -14,9 +14,9 @@ pub fn where_attack() -> AttackData {
         udp_mode: false,
     };
     println!("Where to attack?(give url)");
+    let unparsed_str = get_input();
     unsafe {
-        get_input(&mut UNSAFE_PUB_VAR.attack_url);
-        UNSAFE_PUB_VAR.attack_url = UNSAFE_PUB_VAR.attack_url.trim().to_owned();
+        UNSAFE_PUB_VAR.attack_url = unparsed_str.to_owned();
     }
     println!("Do you want to use UDP(y or n)");
     return_data.udp_mode = true_or_no();
@@ -25,9 +25,8 @@ pub fn where_attack() -> AttackData {
         return_data.ai_mode = true_or_no();
 
         loop {
-            let mut unparsed_str = "".to_owned();
             println!("Proxy? (if you don't want one hit n)");
-            get_input(&mut unparsed_str);
+            let unparsed_str = get_input();
             match unparsed_str.trim() {
                 "n" => {
                     println!("{}", proxy_set("", false).expect("Failed when setting http client"));
@@ -49,10 +48,9 @@ pub fn where_attack() -> AttackData {
         return_data.ai_mode = false;
     }
     loop {
-        let mut unparsed_str = "".to_owned();
         println!("Threads? (if you get a dns error lower threads)");
-        get_input(&mut unparsed_str);
-        match unparsed_str.trim().parse() {
+        let unparsed_str = get_input();
+        match unparsed_str.parse() {
             Ok(num) => {
                 if let Ok(mut data) = SAFE_PUB_VAR.lock() {
                     data.threads_allowed = num;
@@ -72,8 +70,7 @@ pub fn where_attack() -> AttackData {
 
 fn true_or_no() -> bool {
     loop {
-        let mut unparsed_str = "".to_owned();
-        get_input(&mut unparsed_str);
+        let unparsed_str = get_input();
         match unparsed_str.trim() {
             "y" => {
                 return true;
@@ -88,12 +85,13 @@ fn true_or_no() -> bool {
     }
 }
 
-fn get_input(input: &mut String) {
+fn get_input() -> String {
+    let mut val = "".to_owned();
     loop {
         let error = io::stdin()
-            .read_line(input);
+            .read_line(&mut val);
         if error.is_ok() {
-            return;
+            return val.trim().to_owned();
         } else {
             println!("please try again");
         }
