@@ -16,7 +16,7 @@ pub fn where_attack() -> AttackData {
     println!("Where to attack?(give url)");
     let unparsed_str = get_input();
     unsafe {
-        UNSAFE_PUB_VAR.attack_url = unparsed_str.to_owned();
+        UNSAFE_PUB_VAR.attack_url = unparsed_str.trim().to_owned();
     }
     println!("Do you want to use UDP(y or n)");
     return_data.udp_mode = true_or_no();
@@ -91,7 +91,7 @@ fn get_input() -> String {
         let error = io::stdin()
             .read_line(&mut val);
         if error.is_ok() {
-            return val.trim().to_owned();
+            return val;
         } else {
             println!("please try again");
         }
